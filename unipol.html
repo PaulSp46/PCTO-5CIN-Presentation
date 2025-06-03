@@ -315,21 +315,37 @@
             justify-content: center;
             margin: 0 auto 1rem;
             font-size: 2rem;
+            transition: all 0.3s ease;
         }
 
         .stat-card h3 {
-            font-size: 3rem;
+            font-size: 34px;
             font-weight: 900;
             background: var(--gradient-unipol);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             margin-bottom: 0.5rem;
+            transition: all 0.3s ease;
         }
 
         .stat-card p {
             color: var(--gray);
             font-size: 1rem;
             font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        /* Hover effect for white text */
+        .stat-card:hover .stat-icon {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .stat-card:hover h3 {
+            -webkit-text-fill-color: white;
+        }
+
+        .stat-card:hover p {
+            color: white;
         }
 
         /* Main Content Grid */
