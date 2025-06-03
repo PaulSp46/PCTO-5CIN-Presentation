@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Esperienza Unipol - Paolo Castiglione</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0A0E27;
+            --secondary: #FF6B6B;
+            --accent: #4ECDC4;
+            --gold: #FFD93D;
+            --white: #FFFFFF;
+            --gray-light: #F7F9FB;
+            --gray: #6C757D;
+            --dark: #1A1E3A;
+            --unipol-red: #e31e24;
+            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --gradient-dark: linear-gradient(180deg, #0A0E27 0%, #1A1E3A 100%);
+            --gradient-unipol: linear-gradient(135deg, #e31e24 0%, #b91c1c 100%);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--primary);
+            overflow-x: hidden;
+            background: var(--white);
+        }
+
+        /* Loader */
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+
+        .loader.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loader-circle {
+            width: 60px;
+            height: 60px;
+            border: 3px solid rgba(255, 255, 255, 0.2);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            width: 100%;
+            padding: 1.5rem 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        nav.scrolled {
+            background: rgba(10, 14, 39, 0.95);
+            padding: 1rem 0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .back-button {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 600;
+            position: relative;
+            transition: all 0.3s ease;
+            padding: 0.5rem 0;
+        }
+
+        .back-button::before {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: var(--accent);
+            transition: width 0.3s ease;
+            border-radius: 2px;
+        }
+
+        .back-button:hover::before {
+            width: 100%;
+        }
+
+        .back-button:hover {
+            transform: translateX(-5px);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 80vh;
+            background: var(--gradient-unipol);
+            position: relative;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0.1;
+            background-image: url('data:image/svg+xml,%3Csvg width="100" height="100" xmlns="http://www.w3.org/2000/svg"%3E%3Cdefs%3E%3Cpattern id="grid" width="50" height="50" patternUnits="userSpaceOnUse"%3E%3Cpath d="M 50 0 L 0 0 0 50" fill="none" stroke="white" stroke-width="1"/%3E%3C/pattern%3E%3C/defs%3E%3Crect width="100" height="100" fill="url(%23grid)" /%3E%3C/svg%3E');
+        }
+
+        .floating-shapes {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .shape {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(40px);
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .shape:nth-child(1) {
+            width: 400px;
+            height: 400px;
+            background: rgba(227, 30, 36, 0.3);
+            top: -200px;
+            right: -100px;
+            animation-delay: 0s;
+        }
+
+        .shape:nth-child(2) {
+            width: 300px;
+            height: 300px;
+            background: rgba(185, 28, 28, 0.3);
+            bottom: -150px;
+            left: -100px;
+            animation-delay: 5s;
+        }
+
+        .shape:nth-child(3) {
+            width: 250px;
+            height: 250px;
+            background: rgba(255, 107, 107, 0.3);
+            top: 50%;
+            left: 50%;
+            animation-delay: 10s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(100px, -100px) scale(1.1); }
+            50% { transform: translate(-100px, 100px) scale(0.9); }
+            75% { transform: translate(50px, 50px) scale(1.05); }
+        }
+
+        .hero-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 6vw, 5rem);
+            font-weight: 900;
+            color: var(--white);
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            opacity: 0;
+            animation: slideUp 1s ease forwards;
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: slideUp 1s ease 0.2s forwards;
+        }
+
+        .hero-meta {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+            opacity: 0;
+            animation: slideUp 1s ease 0.4s forwards;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            backdrop-filter: blur(10px);
+            color: var(--white);
+            font-weight: 500;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Content Section */
+        .content {
+            max-width: 1400px;
+            margin: -4rem auto 4rem;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .stat-card {
+            background: var(--white);
+            padding: 2.5rem;
+            border-radius: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            transform: translateY(50px);
+        }
+
+        .stat-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: var(--gradient-unipol);
+            border-radius: 20px;
+            opacity: 0;
+            z-index: -1;
+            transition: opacity 0.3s ease;
+        }
+
+        .stat-card:hover::before {
+            opacity: 1;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-unipol);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 2rem;
+        }
+
+        .stat-card h3 {
+            font-size: 3rem;
+            font-weight: 900;
+            background: var(--gradient-unipol);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card p {
+            color: var(--gray);
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        /* Main Content Grid */
+        .main-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+
+        .content-section {
+            background: var(--white);
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.6s ease;
+        }
+
+        .content-section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .content-section h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 2rem;
+        }
+
+        .content-section h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .content-section p {
+            color: var(--gray);
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding: 2rem 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 30px;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: var(--gradient-unipol);
+            border-radius: 2px;
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-left: 70px;
+            margin-bottom: 2.5rem;
+            opacity: 0;
+            transform: translateX(-50px);
+            transition: all 0.6s ease;
+        }
+
+        .timeline-item.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: 22px;
+            top: 5px;
+            width: 18px;
+            height: 18px;
+            background: var(--white);
+            border: 4px solid var(--unipol-red);
+            border-radius: 50%;
+            box-shadow: 0 0 0 4px rgba(227, 30, 36, 0.2);
+        }
+
+        .timeline-content {
+            background: var(--gray-light);
+            padding: 1.8rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .timeline-content:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        .timeline-date {
+            color: var(--unipol-red);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        /* Skills Grid */
+        .skills-learned {
+            background: var(--gradient-dark);
+            color: var(--white);
+            padding: 4rem;
+            border-radius: 20px;
+            margin-top: 3rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .skills-learned h2 {
+            color: var(--white) !important;
+            margin-bottom: 2rem !important;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .skill-item {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-align: center;
+        }
+
+        .skill-item:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .skill-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-unipol);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            margin: 0 auto 1rem;
+            font-size: 1.5rem;
+        }
+
+        .skill-item strong {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--gold);
+        }
+
+        .skill-item p {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* Quote Section */
+        .quote-section {
+            background: var(--gradient-1);
+            color: white;
+            padding: 4rem;
+            border-radius: 20px;
+            margin-top: 3rem;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .quote-section::before {
+            content: '"';
+            position: absolute;
+            top: -40px;
+            left: 40px;
+            font-size: 10rem;
+            opacity: 0.1;
+            font-family: serif;
+        }
+
+        .quote-section p {
+            font-size: 1.5rem;
+            line-height: 1.8;
+            font-style: italic;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: sticky;
+            top: 100px;
+            height: fit-content;
+        }
+
+        .info-box {
+            background: var(--white);
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateX(50px);
+            transition: all 0.6s ease;
+        }
+
+        .info-box.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .info-box h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1.5rem;
+        }
+
+        .team-member {
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--gray-light);
+        }
+
+        .team-member:last-child {
+            border-bottom: none;
+        }
+
+        .team-member strong {
+            color: var(--primary);
+            display: block;
+            margin-bottom: 0.3rem;
+        }
+
+        .team-member span {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .info-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .info-list li {
+            padding: 0.8rem 0;
+            padding-left: 2rem;
+            position: relative;
+            color: var(--gray);
+        }
+
+        .info-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--unipol-red);
+            font-weight: bold;
+        }
+
+        .info-stat {
+            display: flex;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--gray-light);
+        }
+
+        .info-stat:last-child {
+            border-bottom: none;
+        }
+
+        .info-stat-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-unipol);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .info-stat-content h4 {
+            color: var(--primary);
+            margin-bottom: 0.2rem;
+        }
+
+        .info-stat-content p {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: relative;
+                top: 0;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            }
+
+            .skills-grid {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            }
+
+            .hero-meta {
+                gap: 1rem;
+            }
+
+            .meta-item {
+                font-size: 0.9rem;
+                padding: 0.6rem 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loader -->
+    <div class="loader" id="loader">
+        <div class="loader-circle"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="nav-container">
+            <a href="test.html" class="back-button">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 12H5M12 19l-7-7 7-7"/>
+                </svg>
+                Torna al Portfolio
+            </a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-bg"></div>
+        <div class="floating-shapes">
+            <div class="shape"></div>
+            <div class="shape"></div>
+            <div class="shape"></div>
+        </div>
+        <div class="hero-content">
+            <h1>Esperienza presso Unipol</h1>
+            <p>Digital Acceleration Beyond Insurance</p>
+            <div class="hero-meta">
+                <div class="meta-item">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                        <line x1="16" y1="2" x2="16" y2="6"/>
+                        <line x1="8" y1="2" x2="8" y2="6"/>
+                        <line x1="3" y1="10" x2="21" y2="10"/>
+                    </svg>
+                    <span>25 Novembre - 20 Dicembre 2024</span>
+                </div>
+                <div class="meta-item">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                        <circle cx="12" cy="10" r="3"/>
+                    </svg>
+                    <span>Bologna</span>
+                </div>
+                <div class="meta-item">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <polyline points="12 6 12 12 16 14"/>
+                    </svg>
+                    <span>160 ore totali</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Content -->
+    <div class="content">
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">👥</div>
+                <h3>12.407</h3>
+                <p>Dipendenti</p>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">💰</div>
+                <h3>15,06 mld €</h3>
+                <p>Fatturato 2023</p>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">🏢</div>
+                <h3>1963</h3>
+                <p>Anno di fondazione</p>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">📅</div>
+                <h3>3 settimane</h3>
+                <p>Durata stage</p>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="main-column">
+                <!-- L'Azienda -->
+                <div class="content-section">
+                    <h2>L'Azienda</h2>
+                    <p>Unipol è uno dei principali gruppi assicurativi europei e leader in Italia nei rami Danni. Opera attraverso marchi quali UnipolSai Assicurazioni, Linear Assicurazioni, UniSalute e Arca Vita, oltre ai servizi bancari e finanziari in partnership con BPER Banca.</p>
+                    <p>Il Gruppo gestisce anche patrimoni immobiliari e attività alberghiere, rappresentando una realtà diversificata e innovativa nel panorama finanziario italiano.</p>
+                </div>
+
+                <!-- Il Mio Ruolo -->
+                <div class="content-section">
+                    <h2>Il Mio Ruolo</h2>
+                    <p>Sono stato inserito nel dipartimento <strong>Digital Acceleration Beyond Insurance</strong>, all'interno della Direzione Sistemi Informatici. Il mio team si occupava della gestione di un progetto informatico seguendo la metodologia waterfall.</p>
+                    <p>L'obiettivo principale era sviluppare e migliorare un voicebot preesistente, confrontando diverse soluzioni tecnologiche per valutarne l'efficacia. Ho seguito tutte le fasi del ciclo di vita del progetto: avvio, progettazione, sviluppo, test e chiusura.</p>
+                </div>
+
+                <!-- Il Progetto -->
+                <div class="content-section">
+                    <h2>Il Progetto Voicebot</h2>
+                    <p>Il progetto principale su cui ho lavorato riguardava la creazione di un voicebot telefonico di assistenza per un'azienda di car rental del gruppo Unipol.</p>
+                    
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-dot"></div>
+                            <div class="timeline-content">
+                                <div class="timeline-date">Prima settimana</div>
+                                <p>Analisi delle caratteristiche di diversi ecosistemi e infrastrutture, documentando vantaggi e limiti di ciascuna opzione.</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot"></div>
+                            <div class="timeline-content">
+                                <div class="timeline-date">Seconda settimana</div>
+                                <p>Sviluppo di parti di codice del voicebot e integrazione con piattaforme di comunicazione interne.</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot"></div>
+                            <div class="timeline-content">
+                                <div class="timeline-date">Terza settimana</div>
+                                <p>Test, ottimizzazione e documentazione finale del progetto.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Competenze Acquisite -->
+                <div class="skills-learned">
+                    <h2>Competenze Acquisite</h2>
+                    <div class="skills-grid">
+                        <div class="skill-item">
+                            <div class="skill-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M9 11H3v10h6V11zm5-7H8v17h6V4zm5 11h-6v6h6v-6z"/>
+                                </svg>
+                            </div>
+                            <strong>Project Management</strong>
+                            <p>Metodologia waterfall e gestione delle milestone</p>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z"/>
+                                </svg>
+                            </div>
+                            <strong>Security Standards</strong>
+                            <p>WASP e best practice di sicurezza enterprise</p>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                                    <line x1="9" y1="9" x2="15" y2="15"/>
+                                    <line x1="15" y1="9" x2="9" y2="15"/>
+                                </svg>
+                            </div>
+                            <strong>AI & Voicebot</strong>
+                            <p>Sviluppo e integrazione di assistenti vocali</p>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                                    <circle cx="9" cy="7" r="4"/>
+                                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                                    <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                                </svg>
+                            </div>
+                            <strong>Team Collaboration</strong>
+                            <p>Lavoro in team multidisciplinari</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Riflessioni -->
+                <div class="quote-section">
+                    <p>"L'esperienza in Unipol mi ha permesso di concretizzare molte delle nozioni teoriche studiate, mostrandomi quali argomenti devo approfondire ulteriormente per applicarli a problemi reali. Questo percorso mi ha incuriosito e motivato a continuare lo studio."</p>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <div class="info-box">
+                    <h3>Il Team</h3>
+                    <div class="team-member">
+                        <strong>Stefano Romagnoli</strong>
+                        <span>Project Leader & Tutor</span>
+                    </div>
+                    <div class="team-member">
+                        <strong>Andrea Giglio</strong>
+                        <span>Senior Developer</span>
+                    </div>
+                    <div class="team-member">
+                        <strong>Roberto Ampezzan</strong>
+                        <span>System Analyst</span>
+                    </div>
+                    <div class="team-member">
+                        <strong>Khodakarami Masoudreza</strong>
+                        <span>Security Specialist</span>
+                    </div>
+                    <div class="team-member">
+                        <strong>Francesco Pichierri</strong>
+                        <span>QA Tester</span>
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <h3>Dettagli Progetto</h3>
+                    <div class="info-stat">
+                        <div class="info-stat-icon">🎯</div>
+                        <div class="info-stat-content">
+                            <h4>Obiettivo</h4>
+                            <p>Voicebot assistenza</p>
+                        </div>
+                    </div>
+                    <div class="info-stat">
+                        <div class="info-stat-icon">⚙️</div>
+                        <div class="info-stat-content">
+                            <h4>Metodologia</h4>
+                            <p>Waterfall</p>
+                        </div>
+                    </div>
+                    <div class="info-stat">
+                        <div class="info-stat-icon">💼</div>
+                        <div class="info-stat-content">
+                            <h4>Dipartimento</h4>
+                            <p>Digital Acceleration</p>
+                        </div>
+                    </div>
+                    <div class="info-stat">
+                        <div class="info-stat-icon">📊</div>
+                        <div class="info-stat-content">
+                            <h4>Deliverable</h4>
+                            <p>Prototipo funzionante</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <h3>Figure Professionali</h3>
+                    <ul class="info-list">
+                        <li>Project Manager</li>
+                        <li>Business Analyst</li>
+                        <li>Security Manager</li>
+                        <li>QA Tester</li>
+                        <li>Change Manager</li>
+                        <li>Service Manager</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Loader
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loader').classList.add('hidden');
+            }, 1000);
+        });
+
+        // Navbar Scroll Effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 100) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Intersection Observer for Animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        // Observe elements
+        document.querySelectorAll('.stat-card, .content-section, .info-box, .timeline-item').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Parallax Effect on Hero
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const hero = document.querySelector('.hero-content');
+            const shapes = document.querySelectorAll('.shape');
+            
+            if (hero && scrolled < window.innerHeight) {
+                hero.style.transform = `translateY(${scrolled * 0.5}px)`;
+                hero.style.opacity = 1 - scrolled / 800;
+            }
+            
+            shapes.forEach((shape, index) => {
+                const speed = 0.5 + index * 0.1;
+                shape.style.transform = `translateY(${scrolled * speed}px)`;
+            });
+        });
+    </script>
+</body>
+</html>

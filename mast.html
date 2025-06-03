@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Progetto MAST - Paolo Castiglione</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0A0E27;
+            --secondary: #FF6B6B;
+            --accent: #4ECDC4;
+            --gold: #FFD93D;
+            --white: #FFFFFF;
+            --gray-light: #F7F9FB;
+            --gray: #6C757D;
+            --dark: #1A1E3A;
+            --nesquik-yellow: #FFD93D;
+            --nesquik-brown: #8b4513;
+            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --gradient-dark: linear-gradient(180deg, #0A0E27 0%, #1A1E3A 100%);
+            --gradient-nesquik: linear-gradient(135deg, #FFD93D 0%, #FFA500 100%);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--primary);
+            overflow-x: hidden;
+            background: var(--white);
+        }
+
+        /* Loader */
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+
+        .loader.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loader-circle {
+            width: 60px;
+            height: 60px;
+            border: 3px solid rgba(255, 255, 255, 0.2);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            width: 100%;
+            padding: 1.5rem 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        nav.scrolled {
+            background: rgba(10, 14, 39, 0.95);
+            padding: 1rem 0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .back-button {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 600;
+            position: relative;
+            transition: all 0.3s ease;
+            padding: 0.5rem 0;
+        }
+
+        .back-button::before {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: var(--accent);
+            transition: width 0.3s ease;
+            border-radius: 2px;
+        }
+
+        .back-button:hover::before {
+            width: 100%;
+        }
+
+        .back-button:hover {
+            transform: translateX(-5px);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 80vh;
+            background: var(--gradient-nesquik);
+            position: relative;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0.1;
+            background-image: url('data:image/svg+xml,%3Csvg width="100" height="100" xmlns="http://www.w3.org/2000/svg"%3E%3Cdefs%3E%3Cpattern id="grid" width="50" height="50" patternUnits="userSpaceOnUse"%3E%3Cpath d="M 50 0 L 0 0 0 50" fill="none" stroke="white" stroke-width="1"/%3E%3C/pattern%3E%3C/defs%3E%3Crect width="100" height="100" fill="url(%23grid)" /%3E%3C/svg%3E');
+        }
+
+        .floating-shapes {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .shape {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(40px);
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .shape:nth-child(1) {
+            width: 400px;
+            height: 400px;
+            background: rgba(255, 215, 0, 0.3);
+            top: -200px;
+            right: -100px;
+            animation-delay: 0s;
+        }
+
+        .shape:nth-child(2) {
+            width: 300px;
+            height: 300px;
+            background: rgba(139, 69, 19, 0.3);
+            bottom: -150px;
+            left: -100px;
+            animation-delay: 5s;
+        }
+
+        .shape:nth-child(3) {
+            width: 250px;
+            height: 250px;
+            background: rgba(255, 165, 0, 0.3);
+            top: 50%;
+            left: 50%;
+            animation-delay: 10s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(100px, -100px) scale(1.1); }
+            50% { transform: translate(-100px, 100px) scale(0.9); }
+            75% { transform: translate(50px, 50px) scale(1.05); }
+        }
+
+        .hero-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 6vw, 5rem);
+            font-weight: 900;
+            color: var(--primary);
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            opacity: 0;
+            animation: slideUp 1s ease forwards;
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            color: rgba(26, 30, 58, 0.9);
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: slideUp 1s ease 0.2s forwards;
+        }
+
+        .hero-meta {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+            opacity: 0;
+            animation: slideUp 1s ease 0.4s forwards;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255, 255, 255, 0.3);
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            backdrop-filter: blur(10px);
+            color: var(--primary);
+            font-weight: 500;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Content Section */
+        .content {
+            max-width: 1400px;
+            margin: -4rem auto 4rem;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .stat-card {
+            background: var(--white);
+            padding: 2.5rem;
+            border-radius: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            transform: translateY(50px);
+        }
+
+        .stat-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: var(--gradient-nesquik);
+            border-radius: 20px;
+            opacity: 0;
+            z-index: -1;
+            transition: opacity 0.3s ease;
+        }
+
+        .stat-card:hover::before {
+            opacity: 1;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-nesquik);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 2rem;
+        }
+
+        .stat-card h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card p {
+            color: var(--gray);
+            font-size: 1rem;
+        }
+
+        /* Main Content Grid */
+        .main-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+
+        .content-section {
+            background: var(--white);
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.6s ease;
+        }
+
+        .content-section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .content-section h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 2rem;
+        }
+
+        .content-section h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .content-section p {
+            color: var(--gray);
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+        }
+
+        /* Features Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: start;
+            gap: 1rem;
+            padding: 1.5rem;
+            background: var(--gray-light);
+            border-radius: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .feature-item:hover {
+            background: var(--gradient-nesquik);
+            transform: translateX(5px);
+        }
+
+        .feature-item:hover * {
+            color: var(--primary) !important;
+        }
+
+        .feature-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-1);
+            color: white;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        /* Design Process */
+        .design-process {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .process-step {
+            text-align: center;
+            position: relative;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.6s ease;
+        }
+
+        .process-step.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .step-number {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-nesquik);
+            color: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 0 auto 1rem;
+            box-shadow: 0 5px 20px rgba(255, 215, 0, 0.3);
+        }
+
+        .process-step h3 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        /* Package Comparison */
+        .package-comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin-top: 2rem;
+            align-items: stretch;
+        }
+
+        .package-card {
+            background: var(--gray-light);
+            padding: 2rem;
+            border-radius: 20px;
+            text-align: center;
+            position: relative;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .package-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .package-card h3 {
+            margin-bottom: 1rem;
+            color: var(--primary);
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .package-visual {
+            width: 220px;
+            height: 300px;
+            margin: 2rem auto;
+            position: relative;
+            transition: transform 0.5s ease;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+
+        .package-visual:hover {
+            transform: scale(1.05);
+        }
+
+        .rect-wrapper {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform-style: preserve-3d;
+            transition: transform 0.6s ease;
+        }
+
+        .rect-wrapper:hover {
+            transform: scale(1.1);
+        }
+
+        .rect-package {
+            width: 200px;
+            height: 231px; /* Matches total height of hexagon including triangles */
+            background: var(--gradient-nesquik);
+            border: 3px solid var(--nesquik-brown);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--primary);
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.3);
+            margin: 0 auto;
+        }
+
+        .hex-wrapper {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform-style: preserve-3d;
+            transition: transform 0.6s ease;
+        }
+
+        .hex-wrapper:hover {
+            transform: rotateY(20deg);
+        }
+
+        .hex-package {
+            width: 200px;
+            height: 115px;
+            background: linear-gradient(135deg, var(--nesquik-yellow) 0%, #FFA500 100%);
+            position: relative;
+            margin: 60px auto;
+            box-shadow: 
+                0 0 0 3px var(--nesquik-brown),
+                0 10px 30px rgba(255, 215, 0, 0.3);
+        }
+
+        .hex-package:before,
+        .hex-package:after {
+            content: "";
+            position: absolute;
+            width: 0;
+            height: 0;
+            left: 0;
+            border-style: solid;
+        }
+
+        .hex-package:before {
+            bottom: 100%;
+            border-color: transparent transparent var(--nesquik-yellow) transparent;
+            border-width: 0 100px 58px 100px;
+            filter: drop-shadow(0 -3px 0 var(--nesquik-brown));
+        }
+
+        .hex-package:after {
+            top: 100%;
+            border-color: #FFA500 transparent transparent transparent;
+            border-width: 58px 100px 0 100px;
+            filter: drop-shadow(0 3px 0 var(--nesquik-brown));
+        }
+
+        .hex-label {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-weight: bold;
+            color: var(--primary);
+            font-size: 1.2rem;
+            z-index: 1;
+            text-align: center;
+        }
+
+        /* Innovation Section */
+        .innovation-section {
+            background: var(--gradient-dark);
+            color: var(--white);
+            padding: 4rem;
+            border-radius: 20px;
+            margin-top: 3rem;
+            margin-bottom: 3rem;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .innovation-section h2 {
+            color: var(--white) !important;
+            margin-bottom: 2rem !important;
+        }
+
+        .innovation-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .innovation-item {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .innovation-item:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .innovation-item h4 {
+            color: var(--gold);
+            margin-bottom: 1rem;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: sticky;
+            top: 100px;
+            height: fit-content;
+        }
+
+        .info-box {
+            background: var(--white);
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateX(50px);
+            transition: all 0.6s ease;
+        }
+
+        .info-box.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .info-box h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1.5rem;
+        }
+
+        .info-stat {
+            display: flex;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--gray-light);
+        }
+
+        .info-stat:last-child {
+            border-bottom: none;
+        }
+
+        .info-stat-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-nesquik);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .info-stat-content h4 {
+            color: var(--primary);
+            margin-bottom: 0.2rem;
+        }
+
+        .info-stat-content p {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        /* Results Section */
+        .results-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .results-list li {
+            padding: 1rem 0 1rem 3rem;
+            position: relative;
+            color: var(--gray);
+            line-height: 1.8;
+        }
+
+        .results-list li::before {
+            content: '✨';
+            position: absolute;
+            left: 0;
+            top: 1rem;
+            font-size: 1.5rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: relative;
+                top: 0;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            }
+
+            .package-comparison {
+                grid-template-columns: 1fr;
+            }
+
+            .design-process {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .hero-meta {
+                gap: 1rem;
+            }
+
+            .meta-item {
+                font-size: 0.9rem;
+                padding: 0.6rem 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loader -->
+    <div class="loader" id="loader">
+        <div class="loader-circle"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="back-button">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 12H5M12 19l-7-7 7-7"/>
+                </svg>
+                Torna al Portfolio
+            </a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-bg"></div>
+        <div class="floating-shapes">
+            <div class="shape"></div>
+            <div class="shape"></div>
+            <div class="shape"></div>
+        </div>
+        <div class="hero-content">
+            <h1>Progetto MAST</h1>
+            <p>Restyling del Packaging Nesquik Maxi Coco</p>
+            <div class="hero-meta">
+                <div class="meta-item">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                        <line x1="3" y1="9" x2="21" y2="9"/>
+                        <line x1="12" y1="4" x2="12" y2="9"/>
+                    </svg>
+                    <span>Design Project</span>
+                </div>
+                <div class="meta-item">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                    </svg>
+                    <span>Product Innovation</span>
+                </div>
+                <div class="meta-item">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <path d="M12 6v6l4 2"/>
+                    </svg>
+                    <span>Progetto PCTO</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Content -->
+    <div class="content">
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">📦</div>
+                <h3>Design Innovativo</h3>
+                <p>Forma esagonale unica per distinguersi dalla concorrenza</p>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">♻️</div>
+                <h3>Sostenibilità</h3>
+                <p>Materiali riciclabili e biodegradabili</p>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">🎯</div>
+                <h3>User Experience</h3>
+                <p>Sistema di apertura migliorato con alette pratiche</p>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">💡</div>
+                <h3>Innovazione</h3>
+                <p>Taglio laser per aperture più precise e pulite</p>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="main-column">
+                <!-- Obiettivo del Progetto -->
+                <div class="content-section">
+                    <h2>Obiettivo del Progetto</h2>
+                    <p>Il management Nestlé ha richiesto uno studio per il restyling della confezione delle barrette Nesquik Maxi Coco. Il prodotto, composto da croccanti palline di cereali, è commercializzato in Italia in una confezione di cartone rettangolare contenente sei barrette.</p>
+                    <p>La sfida era creare una "versione di transizione" con contenuti innovativi ma rispettando i caratteri distintivi dello stile attuale, per abituare gradualmente il consumatore ai cambiamenti.</p>
+                </div>
+
+                <!-- Analisi e Strategia -->
+                <div class="content-section">
+                    <h2>Analisi delle Possibili Soluzioni</h2>
+                    <p>Il packaging rappresenta l'interfaccia tra prodotto e consumatore. Nel settore alimentare deve essere:</p>
+                    
+                    <div class="features-grid">
+                        <div class="feature-item">
+                            <div class="feature-icon">✓</div>
+                            <div>
+                                <strong>Funzionale</strong>
+                                <p>Comodo da riporre negli scaffali e agevole nel trasporto</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">✓</div>
+                            <div>
+                                <strong>Informativo</strong>
+                                <p>Informazioni nutrizionali e di prodotto ben visibili</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">✓</div>
+                            <div>
+                                <strong>Attraente</strong>
+                                <p>Capace di distinguersi sugli scaffali affollati</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">✓</div>
+                            <div>
+                                <strong>Strategico</strong>
+                                <p>Allineato con il brand e le aspettative del mercato</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- La Soluzione Proposta -->
+                <div class="content-section">
+                    <h2>La Soluzione: Packaging Esagonale</h2>
+                    
+                    <div class="package-comparison">
+                        <div class="package-card">
+                            <h3>Design Attuale</h3>
+                            <div class="package-visual">
+                                <div class="rect-wrapper">
+                                    <div class="rect-package">
+                                        RETTANGOLARE
+                                    </div>
+                                </div>
+                            </div>
+                            <ul style="text-align: left; list-style: none; padding: 0;">
+                                <li>• Forma tradizionale</li>
+                                <li>• Facile da produrre</li>
+                                <li>• Si confonde sugli scaffali</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="package-card">
+                            <h3>Nuovo Design</h3>
+                            <div class="package-visual">
+                                <div class="hex-wrapper">
+                                    <div class="hex-package">
+                                        <div class="hex-label">ESAGONALE</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <ul style="text-align: left; list-style: none; padding: 0;">
+                                <li>• Forma innovativa e distintiva</li>
+                                <li>• Forte impatto visivo</li>
+                                <li>• Migliore ergonomia</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Processo di Design -->
+                <div class="content-section">
+                    <h2>Il Processo di Design</h2>
+                    
+                    <div class="design-process">
+                        <div class="process-step">
+                            <div class="step-number">1</div>
+                            <h3>Ricerca</h3>
+                            <p>Analisi del mercato e delle esigenze dei consumatori</p>
+                        </div>
+                        <div class="process-step">
+                            <div class="step-number">2</div>
+                            <h3>Ideazione</h3>
+                            <p>Brainstorming e sviluppo concept esagonale</p>
+                        </div>
+                        <div class="process-step">
+                            <div class="step-number">3</div>
+                            <h3>Prototipazione</h3>
+                            <p>Creazione modelli 3D e test funzionali</p>
+                        </div>
+                        <div class="process-step">
+                            <div class="step-number">4</div>
+                            <h3>Ottimizzazione</h3>
+                            <p>Miglioramento sistema apertura e ergonomia</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Innovazioni Tecniche -->
+                <div class="innovation-section">
+                    <h2>Innovazioni Implementate</h2>
+                    
+                    <div class="innovation-grid">
+                        <div class="innovation-item">
+                            <h4>Alette di Apertura</h4>
+                            <p>Sistema migliorato per sollevare agevolmente il lato apribile</p>
+                        </div>
+                        <div class="innovation-item">
+                            <h4>Taglio Laser</h4>
+                            <p>Fori più netti per evitare rotture alla confezione</p>
+                        </div>
+                        <div class="innovation-item">
+                            <h4>Layout Preservato</h4>
+                            <p>Font e colori mantenuti per continuità del brand</p>
+                        </div>
+                        <div class="innovation-item">
+                            <h4>Costi Contenuti</h4>
+                            <p>Impatto minimo sul costo finale del prodotto</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Conclusioni -->
+                <div class="content-section">
+                    <h2>Risultati e Benefici Attesi</h2>
+                    <ul class="results-list">
+                        <li>Incrementare la desiderabilità e il valore percepito del prodotto attraverso un design distintivo che comunica innovazione e qualità premium</li>
+                        <li>Migliorare l'identificazione e distinzione rispetto alla concorrenza grazie alla forma esagonale unica nel settore delle barrette di cereali</li>
+                        <li>Mantenere l'impegno verso la sostenibilità ambientale utilizzando materiali completamente riciclabili e biodegradabili</li>
+                        <li>Creare un precedente per future innovazioni nel packaging, stabilendo Nesquik come brand leader nell'innovazione</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <div class="info-box">
+                    <h3>Dettagli Progetto</h3>
+                    <div class="info-stat">
+                        <div class="info-stat-icon">🏢</div>
+                        <div class="info-stat-content">
+                            <h4>Cliente</h4>
+                            <p>Nestlé Italia</p>
+                        </div>
+                    </div>
+                    <div class="info-stat">
+                        <div class="info-stat-icon">📅</div>
+                        <div class="info-stat-content">
+                            <h4>Durata</h4>
+                            <p>3 mesi di sviluppo</p>
+                        </div>
+                    </div>
+                    <div class="info-stat">
+                        <div class="info-stat-icon">🎯</div>
+                        <div class="info-stat-content">
+                            <h4>Obiettivo</h4>
+                            <p>Restyling packaging</p>
+                        </div>
+                    </div>
+                    <div class="info-stat">
+                        <div class="info-stat-icon">💡</div>
+                        <div class="info-stat-content">
+                            <h4>Innovazione</h4>
+                            <p>Design esagonale</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <h3>Competenze Applicate</h3>
+                    <div class="info-stat">
+                        <div class="info-stat-icon">🎨</div>
+                        <div class="info-stat-content">
+                            <h4>Product Design</h4>
+                            <p>Concept e prototipazione</p>
+                        </div>
+                    </div>
+                    <div class="info-stat">
+                        <div class="info-stat-icon">📊</div>
+                        <div class="info-stat-content">
+                            <h4>Market Analysis</h4>
+                            <p>Ricerca competitiva</p>
+                        </div>
+                    </div>
+                    <div class="info-stat">
+                        <div class="info-stat-icon">🔧</div>
+                        <div class="info-stat-content">
+                            <h4>3D Modeling</h4>
+                            <p>Prototipi digitali</p>
+                        </div>
+                    </div>
+                    <div class="info-stat">
+                        <div class="info-stat-icon">📈</div>
+                        <div class="info-stat-content">
+                            <h4>Marketing Strategy</h4>
+                            <p>Posizionamento brand</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <h3>Ricerca di Mercato</h3>
+                    <div style="text-align: center; padding: 1rem 0;">
+                        <div style="margin-bottom: 1.5rem;">
+                            <h4 style="color: var(--primary); margin-bottom: 0.5rem;">Competitor Analizzati</h4>
+                            <p style="font-size: 2rem; font-weight: 700; color: var(--nesquik-yellow);">5</p>
+                        </div>
+                        <div style="margin-bottom: 1.5rem;">
+                            <h4 style="color: var(--primary); margin-bottom: 0.5rem;">Focus Group</h4>
+                            <p style="font-size: 2rem; font-weight: 700; color: var(--nesquik-yellow);">3</p>
+                        </div>
+                        <div>
+                            <h4 style="color: var(--primary); margin-bottom: 0.5rem;">Prototipi Testati</h4>
+                            <p style="font-size: 2rem; font-weight: 700; color: var(--nesquik-yellow);">8</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Loader
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loader').classList.add('hidden');
+            }, 1000);
+        });
+
+        // Navbar Scroll Effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 100) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Intersection Observer for Animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        // Observe elements
+        document.querySelectorAll('.stat-card, .content-section, .info-box, .process-step').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Parallax Effect on Hero
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const hero = document.querySelector('.hero-content');
+            const shapes = document.querySelectorAll('.shape');
+            
+            if (hero && scrolled < window.innerHeight) {
+                hero.style.transform = `translateY(${scrolled * 0.5}px)`;
+                hero.style.opacity = 1 - scrolled / 800;
+            }
+            
+                            shapes.forEach((shape, index) => {
+                const speed = 0.5 + index * 0.1;
+                shape.style.transform = `translateY(${scrolled * speed}px)`;
+            });
+        });
+    </script>
+</body>
+</html>

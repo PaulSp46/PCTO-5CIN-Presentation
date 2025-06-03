@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Esperienza Cineca - Paolo Castiglione</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0A0E27;
+            --secondary: #FF6B6B;
+            --accent: #4ECDC4;
+            --gold: #FFD93D;
+            --white: #FFFFFF;
+            --gray-light: #F7F9FB;
+            --gray: #6C757D;
+            --dark: #1A1E3A;
+            --cineca-blue: #0066cc;
+            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --gradient-dark: linear-gradient(180deg, #0A0E27 0%, #1A1E3A 100%);
+            --gradient-cineca: linear-gradient(135deg, #0066cc 0%, #004499 100%);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--primary);
+            overflow-x: hidden;
+            background: var(--white);
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            width: 100%;
+            padding: 1.5rem 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        nav.scrolled {
+            background: rgba(10, 14, 39, 0.95);
+            padding: 1rem 0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .back-button {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 600;
+            position: relative;
+            transition: all 0.3s ease;
+            padding: 0.5rem 0;
+        }
+
+        .back-button::before {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: var(--accent);
+            transition: width 0.3s ease;
+            border-radius: 2px;
+        }
+
+        .back-button:hover::before {
+            width: 100%;
+        }
+
+        .back-button:hover {
+            transform: translateX(-5px);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 80vh;
+            background: var(--gradient-cineca);
+            position: relative;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0.1;
+            background-image: url('data:image/svg+xml,%3Csvg width="100" height="100" xmlns="http://www.w3.org/2000/svg"%3E%3Cdefs%3E%3Cpattern id="grid" width="50" height="50" patternUnits="userSpaceOnUse"%3E%3Cpath d="M 50 0 L 0 0 0 50" fill="none" stroke="white" stroke-width="1"/%3E%3C/pattern%3E%3C/defs%3E%3Crect width="100" height="100" fill="url(%23grid)" /%3E%3C/svg%3E');
+        }
+
+        .floating-shapes {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .shape {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(40px);
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .shape:nth-child(1) {
+            width: 400px;
+            height: 400px;
+            background: rgba(78, 205, 196, 0.3);
+            top: -200px;
+            right: -100px;
+            animation-delay: 0s;
+        }
+
+        .shape:nth-child(2) {
+            width: 300px;
+            height: 300px;
+            background: rgba(0, 102, 204, 0.3);
+            bottom: -150px;
+            left: -100px;
+            animation-delay: 5s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(100px, -100px) scale(1.1); }
+            50% { transform: translate(-100px, 100px) scale(0.9); }
+            75% { transform: translate(50px, 50px) scale(1.05); }
+        }
+
+        .hero-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 6vw, 5rem);
+            font-weight: 900;
+            color: var(--white);
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            opacity: 0;
+            animation: slideUp 1s ease forwards;
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: slideUp 1s ease 0.2s forwards;
+        }
+
+        .hero-meta {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+            opacity: 0;
+            animation: slideUp 1s ease 0.4s forwards;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            backdrop-filter: blur(10px);
+            color: var(--white);
+            font-weight: 500;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Content Section */
+        .content {
+            max-width: 1400px;
+            margin: -4rem auto 4rem;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .stat-card {
+            background: var(--white);
+            padding: 2.5rem;
+            border-radius: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            transform: translateY(50px);
+        }
+
+        .stat-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: var(--gradient-cineca);
+            border-radius: 20px;
+            opacity: 0;
+            z-index: -1;
+            transition: opacity 0.3s ease;
+        }
+
+        .stat-card:hover::before {
+            opacity: 1;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .stat-card h3 {
+            font-size: 3rem;
+            font-weight: 900;
+            background: var(--gradient-cineca);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card p {
+            color: var(--gray);
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        /* Main Content Grid */
+        .main-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+
+        .content-section {
+            background: var(--white);
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.6s ease;
+        }
+
+        .content-section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .content-section h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 2rem;
+        }
+
+        .content-section h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .content-section p {
+            color: var(--gray);
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+        }
+
+        /* Organization Chart */
+        .org-chart {
+            background: var(--gray-light);
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+        }
+
+        .org-level {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+
+        .org-node {
+            background: var(--gradient-cineca);
+            color: white;
+            padding: 1.2rem 2.5rem;
+            border-radius: 50px;
+            text-align: center;
+            font-weight: 600;
+            box-shadow: 0 5px 20px rgba(0, 102, 204, 0.3);
+        }
+
+        .org-branches {
+            display: flex;
+            justify-content: space-around;
+            gap: 1rem;
+        }
+
+        .org-branch {
+            background: white;
+            padding: 1.2rem;
+            border-radius: 15px;
+            text-align: center;
+            flex: 1;
+            font-size: 0.9rem;
+            font-weight: 500;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .org-branch:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Code Showcase */
+        .code-showcase {
+            background: #1a1a2e;
+            color: #fff;
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            overflow-x: auto;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .code-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .code-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #ff5f57;
+        }
+
+        .code-dot:nth-child(2) { background: #ffbd2e; }
+        .code-dot:nth-child(3) { background: #28ca42; }
+
+        .code-showcase code {
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: #4ECDC4;
+        }
+
+        /* Timeline */
+        .work-timeline {
+            position: relative;
+            padding: 2rem 0;
+        }
+
+        .work-timeline::before {
+            content: '';
+            position: absolute;
+            left: 30px;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: var(--gradient-cineca);
+            border-radius: 2px;
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-left: 70px;
+            margin-bottom: 2.5rem;
+            opacity: 0;
+            transform: translateX(-50px);
+            transition: all 0.6s ease;
+        }
+
+        .timeline-item.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: 22px;
+            top: 5px;
+            width: 18px;
+            height: 18px;
+            background: var(--white);
+            border: 4px solid var(--cineca-blue);
+            border-radius: 50%;
+            box-shadow: 0 0 0 4px rgba(0, 102, 204, 0.2);
+        }
+
+        .timeline-content {
+            background: var(--gray-light);
+            padding: 1.8rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .timeline-content strong {
+            color: var(--primary);
+            font-size: 1.1rem;
+        }
+
+        /* Tech Stack */
+        .tech-stack {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .tech-item {
+            background: var(--gradient-1);
+            color: var(--white);
+            padding: 1.5rem;
+            border-radius: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tech-item::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .tech-item:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .tech-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .tech-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: sticky;
+            top: 100px;
+            height: fit-content;
+        }
+
+        .info-box {
+            background: var(--white);
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateX(50px);
+            transition: all 0.6s ease;
+        }
+
+        .info-box.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .info-box h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1.5rem;
+        }
+
+        .info-box ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .info-box li {
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--gray-light);
+        }
+
+        .info-box li:last-child {
+            border-bottom: none;
+        }
+
+        .info-box strong {
+            color: var(--primary);
+            display: block;
+            margin-bottom: 0.3rem;
+        }
+
+        .info-box p {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        /* Developer Quote */
+        .developer-quote {
+            background: var(--gradient-dark);
+            color: var(--white);
+            padding: 4rem;
+            border-radius: 20px;
+            margin-top: 3rem;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .developer-quote::before {
+            content: '"';
+            position: absolute;
+            top: -40px;
+            left: 40px;
+            font-size: 10rem;
+            opacity: 0.1;
+            font-family: serif;
+        }
+
+        .developer-quote p {
+            font-size: 1.5rem;
+            line-height: 1.8;
+            font-style: italic;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: relative;
+                top: 0;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            }
+
+            .tech-stack {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .hero-meta {
+                gap: 1rem;
+            }
+
+            .meta-item {
+                font-size: 0.9rem;
+                padding: 0.6rem 1.2rem;
+            }
+        }
+
+        /* Loading Animation */
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+
+        .loader.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loader-circle {
+            width: 60px;
+            height: 60px;
+            border: 3px solid rgba(255, 255, 255, 0.2);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loader -->
+    <div class="loader" id="loader">
+        <div class="loader-circle"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="back-button">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 12H5M12 19l-7-7 7-7"/>
+                </svg>
+                Torna al Portfolio
+            </a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-bg"></div>
+        <div class="floating-shapes">
+            <div class="shape"></div>
+            <div class="shape"></div>
+        </div>
+        <div class="hero-content">
+            <h1>Esperienza presso Cineca</h1>
+            <p>Consorzio Interuniversitario per il Calcolo Automatico</p>
+            <div class="hero-meta">
+                <div class="meta-item">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                        <line x1="16" y1="2" x2="16" y2="6"/>
+                        <line x1="8" y1="2" x2="8" y2="6"/>
+                        <line x1="3" y1="10" x2="21" y2="10"/>
+                    </svg>
+                    <span>6 Maggio - 31 Maggio 2024</span>
+                </div>
+                <div class="meta-item">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                        <circle cx="12" cy="10" r="3"/>
+                    </svg>
+                    <span>Casalecchio di Reno (BO)</span>
+                </div>
+                <div class="meta-item">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <polyline points="12 6 12 12 16 14"/>
+                    </svg>
+                    <span>160 ore totali</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Content -->
+    <div class="content">
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>118</h3>
+                <p>Enti pubblici consorziati</p>
+            </div>
+            <div class="stat-card">
+                <h3>1.200</h3>
+                <p>Dipendenti</p>
+            </div>
+            <div class="stat-card">
+                <h3>130M €</h3>
+                <p>Volume d'affari annuo</p>
+            </div>
+            <div class="stat-card">
+                <h3>1967</h3>
+                <p>Anno di fondazione</p>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="main-column">
+                <!-- L'Azienda -->
+                <div class="content-section">
+                    <h2>Il Consorzio Cineca</h2>
+                    <p>Cineca è un Consorzio Interuniversitario senza scopo di lucro formato da 118 Enti pubblici: 2 Ministeri, 70 Università italiane, 46 Istituzioni pubbliche Nazionali.</p>
+                    <p>Opera secondo il modello dell'in-house providing nell'interesse degli Enti pubblici consorziati per la progettazione e realizzazione di soluzioni IT, rappresentando un'infrastruttura nazionale ad alto impatto tecnologico.</p>
+                    
+                    <div class="org-chart">
+                        <div class="org-level">
+                            <div class="org-node">Direzione Generale</div>
+                        </div>
+                        <div class="org-branches">
+                            <div class="org-branch">Tecnologie e Infrastruttura</div>
+                            <div class="org-branch">Sviluppo e Gestione</div>
+                            <div class="org-branch">HPC-Supercalcolo</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Il Mio Ruolo -->
+                <div class="content-section">
+                    <h2>Il Mio Percorso</h2>
+                    <p>Sono stato inserito nel reparto <strong>Direzione Tecnologie, Sistemi e Infrastruttura</strong>, nel gruppo AMS (Application Management Service) che conta 157 persone e si occupa di sviluppo e manutenzione degli applicativi per i consorziati.</p>
+                    <p>Il mio tutor aziendale, Matteo Gallinucci, è il Technical Leader di <strong>Student Booking</strong>, applicativo di prenotazione appuntamenti, lezioni ed eventi destinato a studenti e cittadini.</p>
+
+                    <div class="work-timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-dot"></div>
+                            <div class="timeline-content">
+                                <strong>Primo giorno</strong>
+                                <p>Setup ambiente di sviluppo: PC con Intel Core i5, 16GB RAM, accesso VPN, configurazione IDE</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot"></div>
+                            <div class="timeline-content">
+                                <strong>Prima settimana</strong>
+                                <p>Familiarizzazione con Spring Boot e Angular, comprensione architettura Student Booking</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot"></div>
+                            <div class="timeline-content">
+                                <strong>Progetto principale</strong>
+                                <p>Implementazione feature per allegare file .ics alle email di notifica per integrazione calendario</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Progetto Sviluppato -->
+                <div class="content-section">
+                    <h2>Il Progetto Student Booking</h2>
+                    <p>Ho lavorato su una feature specifica: l'integrazione di file .ics nelle email di notifica per permettere agli utenti di aggiungere automaticamente gli appuntamenti prenotati al proprio calendario (Outlook, Google Calendar, etc.).</p>
+                    
+                    <div class="code-showcase">
+                        <div class="code-header">
+                            <div class="code-dot"></div>
+                            <div class="code-dot"></div>
+                            <div class="code-dot"></div>
+                        </div>
+                        <code>
+// Esempio di implementazione<br>
+@Service<br>
+public class CalendarService {<br>
+&nbsp;&nbsp;public void attachIcsToEmail(Booking booking) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;// Genera file .ics per calendario<br>
+&nbsp;&nbsp;&nbsp;&nbsp;ICalendar ical = createCalendarEvent(booking);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;emailService.attachFile(ical, "appointment.ics");<br>
+&nbsp;&nbsp;}<br>
+}
+                        </code>
+                    </div>
+
+                    <h3>Stack Tecnologico Utilizzato</h3>
+                    <div class="tech-stack">
+                        <div class="tech-item">
+                            <div class="tech-icon">☕</div>
+                            <strong>Java</strong>
+                        </div>
+                        <div class="tech-item">
+                            <div class="tech-icon">🍃</div>
+                            <strong>Spring Boot</strong>
+                        </div>
+                        <div class="tech-item">
+                            <div class="tech-icon">🅰️</div>
+                            <strong>Angular</strong>
+                        </div>
+                        <div class="tech-item">
+                            <div class="tech-icon">🗄️</div>
+                            <strong>PostgreSQL</strong>
+                        </div>
+                        <div class="tech-item">
+                            <div class="tech-icon">🔧</div>
+                            <strong>Git</strong>
+                        </div>
+                        <div class="tech-item">
+                            <div class="tech-icon">🚀</div>
+                            <strong>Jenkins</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Competenze e Riflessioni -->
+                <div class="developer-quote">
+                    <p>"La realtà che ho vissuto è stata molto gratificante dal punto di vista formativo. Mi ha concretizzato molta della teoria studiata e mi ha incentivato a studiare ancora, nella speranza di poter lavorare presto in ambiti così eccellenti."</p>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <div class="info-box">
+                    <h3>Il Team di Lavoro</h3>
+                    <ul>
+                        <li>
+                            <strong>Matteo Gallinucci</strong>
+                            <p>Direttore Tecnico & Tutor</p>
+                        </li>
+                        <li>
+                            <strong>Lorenzo Appella</strong>
+                            <p>Supervisore</p>
+                        </li>
+                        <li>
+                            <strong>Vito Panasia</strong>
+                            <p>Senior Developer</p>
+                        </li>
+                        <li>
+                            <strong>Team SBK</strong>
+                            <p>Sviluppatori e Tester</p>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="info-box">
+                    <h3>Competenze Acquisite</h3>
+                    <ul>
+                        <li>
+                            <strong>Full Stack Development</strong>
+                            <p>Backend Java + Frontend Angular</p>
+                        </li>
+                        <li>
+                            <strong>Framework Enterprise</strong>
+                            <p>Spring Boot, Hibernate, REST API</p>
+                        </li>
+                        <li>
+                            <strong>Metodologie Agile</strong>
+                            <p>Scrum, Sprint, Code Review</p>
+                        </li>
+                        <li>
+                            <strong>DevOps & CI/CD</strong>
+                            <p>Git, Jenkins, Docker basics</p>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="info-box">
+                    <h3>Settori Cineca</h3>
+                    <div style="font-size: 1.1rem; line-height: 2;">
+                        <div style="display: flex; align-items: center; gap: 0.8rem; margin-bottom: 0.8rem;">
+                            <span style="font-size: 1.5rem;">🎓</span>
+                            <span>Università e Ricerca</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.8rem; margin-bottom: 0.8rem;">
+                            <span style="font-size: 1.5rem;">🏥</span>
+                            <span>Sanità Digitale</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.8rem; margin-bottom: 0.8rem;">
+                            <span style="font-size: 1.5rem;">🏛️</span>
+                            <span>Pubblica Amministrazione</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.8rem;">
+                            <span style="font-size: 1.5rem;">💻</span>
+                            <span>Supercalcolo HPC</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Loader
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loader').classList.add('hidden');
+            }, 1000);
+        });
+
+        // Navbar Scroll Effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 100) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Intersection Observer for Animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        // Observe elements
+        document.querySelectorAll('.stat-card, .content-section, .info-box, .timeline-item').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Parallax Effect on Hero
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const hero = document.querySelector('.hero-content');
+            const shapes = document.querySelectorAll('.shape');
+            
+            if (hero && scrolled < window.innerHeight) {
+                hero.style.transform = `translateY(${scrolled * 0.5}px)`;
+                hero.style.opacity = 1 - scrolled / 800;
+            }
+            
+            shapes.forEach((shape, index) => {
+                const speed = 0.5 + index * 0.1;
+                shape.style.transform = `translateY(${scrolled * speed}px)`;
+            });
+        });
+    </script>
+</body>
+</html>
