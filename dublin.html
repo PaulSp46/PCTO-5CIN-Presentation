@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Esperienza Estera - Paolo Castiglione</title>
+    <title>Esperienza a Cambridge - Paolo Castiglione</title>
     <style>
         * {
             margin: 0;
@@ -24,7 +24,7 @@
             --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
             --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
             --gradient-dark: linear-gradient(180deg, #0A0E27 0%, #1A1E3A 100%);
-            /* Nuovi gradienti per le città */
+            /* Definizione gradienti per le città */
             --gradient-cambridge: linear-gradient(135deg, #8B0000 0%, #B22222 100%);
             --gradient-dublino: linear-gradient(135deg, #169b62 0%, #1E8449 100%);
         }
@@ -328,52 +328,6 @@
             font-size: 1.1rem;
         }
 
-        /* Organization Chart */
-        .org-chart {
-            background: var(--gray-light);
-            padding: 2rem;
-            border-radius: 15px;
-            margin: 2rem 0;
-        }
-
-        .org-level {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 2rem;
-        }
-
-        .org-node {
-            color: white;
-            padding: 1.2rem 2.5rem;
-            border-radius: 50px;
-            text-align: center;
-            font-weight: 600;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
-        }
-
-        .org-branches {
-            display: flex;
-            justify-content: space-around;
-            gap: 1rem;
-        }
-
-        .org-branch {
-            background: white;
-            padding: 1.2rem;
-            border-radius: 15px;
-            text-align: center;
-            flex: 1;
-            font-size: 0.9rem;
-            font-weight: 500;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-            transition: all 0.3s ease;
-        }
-
-        .org-branch:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-        }
-
         /* Gallery */
         .gallery {
             display: grid;
@@ -431,6 +385,7 @@
             top: 0;
             bottom: 0;
             width: 3px;
+            background: var(--timeline-color);
             border-radius: 2px;
         }
 
@@ -455,7 +410,7 @@
             width: 18px;
             height: 18px;
             background: var(--white);
-            border: 4px solid;
+            border: 4px solid var(--timeline-dot-color);
             border-radius: 50%;
             box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.2);
         }
@@ -643,6 +598,7 @@
             left: 0;
             width: 100%;
             height: 100%;
+            background: var(--gradient-dark);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -658,7 +614,7 @@
         .loader-circle {
             width: 60px;
             height: 60px;
-            border: 3px solid rgba(0, 0, 0, 0.2);
+            border: 3px solid rgba(255, 255, 255, 0.2);
             border-top-color: var(--accent);
             border-radius: 50%;
             animation: spin 1s linear infinite;
@@ -688,11 +644,11 @@
     </nav>
 
     <!-- Hero Section -->
-    <section class="hero" id="hero">
+    <section class="hero">
         <div class="hero-bg"></div>
         <div class="floating-shapes">
-            <div class="shape"></div>
-            <div class="shape"></div>
+            <div class="shape" id="shape1"></div>
+            <div class="shape" id="shape2"></div>
         </div>
         <div class="hero-content">
             <h1>Esperienza a Cambridge</h1>
@@ -786,30 +742,35 @@
                     
                     <div class="work-timeline">
                         <div class="timeline-item">
+                            <div class="timeline-dot"></div>
                             <div class="timeline-content">
                                 <strong>Tour dei College</strong>
                                 <p>Visita ai principali college: King's College, Trinity College e St John's College</p>
                             </div>
                         </div>
                         <div class="timeline-item">
+                            <div class="timeline-dot"></div>
                             <div class="timeline-content">
                                 <strong>Punting sul fiume Cam</strong>
                                 <p>Esperienza tradizionale di navigazione sul fiume che attraversa la città</p>
                             </div>
                         </div>
                         <div class="timeline-item">
+                            <div class="timeline-dot"></div>
                             <div class="timeline-content">
                                 <strong>Visita al Fitzwilliam Museum</strong>
                                 <p>Esplorazione di una delle collezioni d'arte più importanti del Regno Unito</p>
                             </div>
                         </div>
                         <div class="timeline-item">
+                            <div class="timeline-dot"></div>
                             <div class="timeline-content">
                                 <strong>Workshop di innovazione</strong>
                                 <p>Partecipazione a un workshop sull'innovazione tecnologica con studenti da tutto il mondo</p>
                             </div>
                         </div>
                         <div class="timeline-item">
+                            <div class="timeline-dot"></div>
                             <div class="timeline-content">
                                 <strong>Presentazione finale</strong>
                                 <p>Presentazione di un progetto su "Digital Transformation in Modern Business"</p>
@@ -852,7 +813,7 @@
                 </div>
 
                 <!-- Citazione finale -->
-                <div class="developer-quote" style="background: var(--gradient-cambridge);">
+                <div class="developer-quote">
                     <p>"Cambridge è stata un'esperienza che ha aperto la mia mente a nuove prospettive e culture. Vivere in un ambiente accademico così stimolante mi ha dato non solo competenze linguistiche, ma anche una maggiore sicurezza nelle mie capacità di comunicare in contesti internazionali."</p>
                 </div>
             </div>
@@ -929,65 +890,61 @@
     </div>
 
     <script>
-        // Cambia questi valori in base alla città (Cambridge o Dublino)
-        const city = 'Cambridge';
-        const gradient = 'var(--gradient-cambridge)';
-        const shapeColors = [
-            'rgba(139, 0, 0, 0.3)',   // Rosso scuro per Cambridge
-            'rgba(178, 34, 34, 0.3)'  // Rosso mattone per Cambridge
-        ];
-        
-        // Imposta il gradiente per l'hero in base alla città
-        document.getElementById('hero').style.background = gradient;
-        
-        // Imposta i colori delle forme fluttuanti
-        document.querySelectorAll('.shape').forEach((shape, index) => {
-            shape.style.background = shapeColors[index];
-        });
-        
-        // Imposta i colori per le card statistiche
-        document.querySelectorAll('.stat-card').forEach(card => {
-            card.addEventListener('mouseenter', function() {
-                this.style.color = 'white';
-            });
-            
-            card.addEventListener('mouseleave', function() {
-                this.style.color = '';
-            });
-            
-            card.style.setProperty('--hover-gradient', gradient);
-            card.querySelector('h3').style.background = gradient;
-            card.querySelector('h3').style.webkitBackgroundClip = 'text';
-            card.querySelector('h3').style.webkitTextFillColor = 'transparent';
-        });
-        
-        // Imposta i colori per la timeline
-        document.querySelector('.work-timeline::before').style.background = gradient;
-        document.querySelectorAll('.timeline-dot').forEach(dot => {
-            dot.style.borderColor = gradient.split(' ')[1]; // Prende il primo colore del gradiente
-        });
-        
-        // Imposta il colore per i punti della timeline
-        document.querySelectorAll('.timeline-dot').forEach(dot => {
-            dot.style.borderColor = gradient.split(' ')[1].replace('linear-gradient(135deg,', '').split(',')[0].trim();
-        });
-        
-        // Imposta il gradiente per i nodi dell'organizzazione
-        document.querySelectorAll('.org-node').forEach(node => {
-            node.style.background = gradient;
-        });
-        
-        // Imposta il gradiente per la citazione
-        document.querySelector('.developer-quote').style.background = gradient;
-        
-        // Loader
+        // 1. Gestione del loader
         window.addEventListener('load', () => {
             setTimeout(() => {
                 document.getElementById('loader').classList.add('hidden');
             }, 1000);
         });
 
-        // Navbar Scroll Effect
+        // 2. Configurazione dei colori per Cambridge
+        const cambridgeConfig = {
+            heroGradient: 'var(--gradient-cambridge)',
+            shapeColors: ['rgba(139, 0, 0, 0.3)', 'rgba(178, 34, 34, 0.3)'],
+            quoteBackground: 'var(--gradient-cambridge)',
+            timelineColor: '#8B0000',
+            timelineDotColor: '#8B0000'
+        };
+
+        // Applicazione dei colori dopo che il DOM è stato caricato
+        document.addEventListener('DOMContentLoaded', function() {
+            // Imposta il gradiente per l'hero
+            document.querySelector('.hero').style.background = cambridgeConfig.heroGradient;
+            
+            // Imposta i colori delle forme
+            document.getElementById('shape1').style.background = cambridgeConfig.shapeColors[0];
+            document.getElementById('shape2').style.background = cambridgeConfig.shapeColors[1];
+            
+            // Imposta il colore della timeline
+            document.documentElement.style.setProperty('--timeline-color', cambridgeConfig.timelineColor);
+            document.documentElement.style.setProperty('--timeline-dot-color', cambridgeConfig.timelineDotColor);
+            
+            // Imposta il background per la citazione
+            document.querySelector('.developer-quote').style.background = cambridgeConfig.quoteBackground;
+            
+            // Imposta il gradiente per le statistiche
+            const statCards = document.querySelectorAll('.stat-card');
+            statCards.forEach(card => {
+                const title = card.querySelector('h3');
+                title.style.background = cambridgeConfig.heroGradient;
+                title.style.webkitBackgroundClip = 'text';
+                title.style.webkitTextFillColor = 'transparent';
+                
+                card.addEventListener('mouseenter', function() {
+                    this.style.color = 'white';
+                    title.style.color = 'white';
+                    this.style.background = cambridgeConfig.heroGradient;
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.color = '';
+                    title.style.color = '';
+                    this.style.background = '';
+                });
+            });
+        });
+
+        // 3. Gestione della navbar durante lo scroll
         window.addEventListener('scroll', () => {
             const navbar = document.getElementById('navbar');
             if (window.scrollY > 100) {
@@ -997,7 +954,7 @@
             }
         });
 
-        // Intersection Observer for Animations
+        // 4. Animazioni al caricamento
         const observerOptions = {
             threshold: 0.1,
             rootMargin: '0px 0px -50px 0px'
@@ -1011,20 +968,20 @@
             });
         }, observerOptions);
 
-        // Observe elements
+        // Osserva gli elementi
         document.querySelectorAll('.stat-card, .content-section, .info-box, .timeline-item').forEach(el => {
             observer.observe(el);
         });
 
-        // Parallax Effect on Hero
+        // 5. Effetto parallasse
         window.addEventListener('scroll', () => {
             const scrolled = window.pageYOffset;
-            const hero = document.querySelector('.hero-content');
+            const heroContent = document.querySelector('.hero-content');
             const shapes = document.querySelectorAll('.shape');
             
-            if (hero && scrolled < window.innerHeight) {
-                hero.style.transform = `translateY(${scrolled * 0.5}px)`;
-                hero.style.opacity = 1 - scrolled / 800;
+            if (heroContent && scrolled < window.innerHeight) {
+                heroContent.style.transform = `translateY(${scrolled * 0.5}px)`;
+                heroContent.style.opacity = 1 - scrolled / 800;
             }
             
             shapes.forEach((shape, index) => {
