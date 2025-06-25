@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Esperienza a Cambridge - Paolo Castiglione</title>
+    <title>Dublin Experience - Paolo Castiglione</title>
     <style>
         * {
             margin: 0;
@@ -12,21 +12,19 @@
         }
 
         :root {
-            --primary: #0A0E27;
-            --secondary: #FF6B6B;
-            --accent: #4ECDC4;
-            --gold: #FFD93D;
+            --primary: #0A5C36; /* Verde scuro irlandese */
+            --secondary: #FF883E; /* Arancione della bandiera irlandese */
+            --accent: #40C575; /* Verde smeraldo */
+            --gold: #FFD93D; /* Oro irlandese */
             --white: #FFFFFF;
             --gray-light: #F7F9FB;
             --gray: #6C757D;
-            --dark: #1A1E3A;
-            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            --gradient-dark: linear-gradient(180deg, #0A0E27 0%, #1A1E3A 100%);
-            /* Definizione gradienti per le città */
-            --gradient-cambridge: linear-gradient(135deg, #8B0000 0%, #B22222 100%);
-            --gradient-dublino: linear-gradient(135deg, #169b62 0%, #1E8449 100%);
+            --dark: #0d3b1e; /* Verde scuro intenso */
+            --gradient-1: linear-gradient(135deg, #0A5C36 0%, #40C575 100%); /* Verde irlandese */
+            --gradient-2: linear-gradient(135deg, #FF883E 0%, #FFD93D 100%); /* Arancione-oro */
+            --gradient-3: linear-gradient(135deg, #169b62 0%, #4ECDC4 100%); /* Verde-acqua */
+            --gradient-dark: linear-gradient(180deg, #0A5C36 0%, #0d3b1e 100%); /* Verde scuro */
+            --gradient-dublino: linear-gradient(135deg, #0A5C36 0%, #FF883E 100%); /* Irlanda (verde-arancione) */
         }
 
         body {
@@ -44,10 +42,11 @@
             z-index: 1000;
             transition: all 0.3s ease;
             backdrop-filter: blur(10px);
+            background: rgba(10, 92, 54, 0.8); /* Verde irlandese trasparente */
         }
 
         nav.scrolled {
-            background: rgba(10, 14, 39, 0.95);
+            background: rgba(10, 92, 54, 0.95); /* Verde irlandese più solido */
             padding: 1rem 0;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
         }
@@ -100,6 +99,7 @@
             display: flex;
             align-items: center;
             overflow: hidden;
+            background: var(--gradient-dublino);
         }
 
         .hero-bg {
@@ -129,6 +129,7 @@
             top: -200px;
             right: -100px;
             animation-delay: 0s;
+            background: rgba(22, 155, 98, 0.3); /* Verde smeraldo chiaro */
         }
 
         .shape:nth-child(2) {
@@ -137,6 +138,7 @@
             bottom: -150px;
             left: -100px;
             animation-delay: 5s;
+            background: rgba(255, 136, 62, 0.3); /* Arancione chiaro */
         }
 
         @keyframes float {
@@ -231,6 +233,8 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             opacity: 0;
             transform: translateY(50px);
+            border: 2px solid transparent;
+            background-clip: padding-box;
         }
 
         .stat-card.visible {
@@ -265,6 +269,9 @@
             font-weight: 900;
             margin-bottom: 0.5rem;
             transition: all 0.3s ease;
+            background: var(--gradient-dublino);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .stat-card p {
@@ -274,9 +281,10 @@
             transition: all 0.3s ease;
         }
 
-        /* Hover effect for white text */
+        /* Hover effect */
         .stat-card:hover h3 {
             color: white;
+            -webkit-text-fill-color: white;
         }
 
         .stat-card:hover p {
@@ -311,6 +319,7 @@
             font-size: 2.5rem;
             font-weight: 800;
             margin-bottom: 2rem;
+            color: var(--primary);
         }
 
         .content-section h3 {
@@ -326,6 +335,113 @@
             line-height: 1.8;
             margin-bottom: 1.5rem;
             font-size: 1.1rem;
+        }
+
+        /* Carousel */
+        .carousel {
+            position: relative;
+            width: 100%;
+            height: 500px;
+            overflow: hidden;
+            border-radius: 20px;
+            margin-bottom: 3rem;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .carousel-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .carousel-item {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 0.8s ease;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .carousel-item.active {
+            opacity: 1;
+        }
+
+        .carousel-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .carousel-caption h3 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: white;
+        }
+
+        .carousel-controls {
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            transform: translateY(-50%);
+            z-index: 10;
+        }
+
+        .carousel-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            font-size: 2rem;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 2rem;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .carousel-btn:hover {
+            background: rgba(255, 255, 255, 0.4);
+            transform: scale(1.1);
+        }
+
+        .carousel-dots {
+            position: absolute;
+            bottom: 20px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            z-index: 10;
+        }
+
+        .carousel-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .carousel-dot.active {
+            background: var(--accent);
+            transform: scale(1.2);
         }
 
         /* Gallery */
@@ -376,6 +492,8 @@
         .work-timeline {
             position: relative;
             padding: 2rem 0;
+            --timeline-color: var(--accent);
+            --timeline-dot-color: var(--accent);
         }
 
         .work-timeline::before {
@@ -490,6 +608,7 @@
             opacity: 0;
             transform: translateX(50px);
             transition: all 0.6s ease;
+            border: 2px solid var(--gray-light);
         }
 
         .info-box.visible {
@@ -501,6 +620,7 @@
             font-size: 1.5rem;
             font-weight: 700;
             margin-bottom: 1.5rem;
+            color: var(--primary);
         }
 
         .info-box ul {
@@ -538,6 +658,7 @@
             overflow: hidden;
             text-align: center;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            background: var(--gradient-dublino);
         }
 
         .developer-quote::before {
@@ -589,6 +710,14 @@
                 font-size: 0.9rem;
                 padding: 0.6rem 1.2rem;
             }
+            
+            .carousel {
+                height: 350px;
+            }
+            
+            .carousel-caption h3 {
+                font-size: 1.5rem;
+            }
         }
 
         /* Loading Animation */
@@ -638,7 +767,7 @@
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M19 12H5M12 19l-7-7 7-7"/>
                 </svg>
-                Torna al Portfolio
+                Back to home
             </a>
         </div>
     </nav>
@@ -651,8 +780,8 @@
             <div class="shape" id="shape2"></div>
         </div>
         <div class="hero-content">
-            <h1>Esperienza a Cambridge</h1>
-            <p>Stage formativo internazionale nella prestigiosa città universitaria</p>
+            <h1>Dublin Experience</h1>
+            <p>Visit to the capital of Ireland with English courses at the CES school</p>
             <div class="hero-meta">
                 <div class="meta-item">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -661,21 +790,14 @@
                         <line x1="8" y1="2" x2="8" y2="6"/>
                         <line x1="3" y1="10" x2="21" y2="10"/>
                     </svg>
-                    <span>15 Luglio - 5 Agosto 2024</span>
+                    <span>23 February - 1 March, 2024</span>
                 </div>
                 <div class="meta-item">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
                         <circle cx="12" cy="10" r="3"/>
                     </svg>
-                    <span>Cambridge, Regno Unito</span>
-                </div>
-                <div class="meta-item">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="12" cy="12" r="10"/>
-                        <polyline points="12 6 12 12 16 14"/>
-                    </svg>
-                    <span>90 ore totali</span>
+                    <span>Dublin, Ireland</span>
                 </div>
             </div>
         </div>
@@ -686,20 +808,78 @@
         <!-- Stats Grid -->
         <div class="stats-grid">
             <div class="stat-card">
-                <h3>3</h3>
-                <p>Settimane di formazione</p>
+                <h3>7</h3>
+                <p>Days' stay</p>
             </div>
             <div class="stat-card">
-                <h3>90+</h3>
-                <p>Ore di lezione</p>
+                <h3>15</h3>
+                <p>Hours of lessons</p>
             </div>
             <div class="stat-card">
-                <h3>20+</h3>
-                <p>Studenti internazionali</p>
+                <h3>7</h3>
+                <p>Cultural Activities</p>
             </div>
-            <div class="stat-card">
-                <h3>10</h3>
-                <p>Attività culturali</p>
+        </div>
+
+        <!-- Carousel -->
+        <div class="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active" style="background-image: url('resurces/dublin1.jpeg')">
+                    <div class="carousel-caption">
+                        <h3>Our group</h3>
+                    </div> 
+                </div>
+                <div class="carousel-item" style="background-image: url('resurces/dublin2.jpeg')">
+                    <div class="carousel-caption">
+                        <h3>UCD - Stable of Computer Science</h3>
+                    </div>
+                </div>
+                <div class="carousel-item" style="background-image: url('resurces/dublin3.jpeg')">
+                    <div class="carousel-caption">
+                        <h3>Guinnes Stable</h3>
+                    </div>
+                </div>
+                <div class="carousel-item" style="background-image: url('resurces/dublin4.jpeg')">
+                    <div class="carousel-caption">
+                        <h3>Cliffs of Moher</h3>
+                    </div>
+                </div>
+                <div class="carousel-item" style="background-image: url('resurces/dublin.jpg')">
+                    <div class="carousel-caption">
+                        <h3>Temple bar</h3>
+                    </div>
+                </div>
+                <div class="carousel-item" style="background-image: url('resurces/dublin7.jpeg')">
+                    <div class="carousel-caption">
+                        <h3>Howth fishing village</h3>
+                    </div>
+                </div>
+                <div class="carousel-item" style="background-image: url('resurces/dublinRoom.jpeg')">
+                    <div class="carousel-caption">
+                        <h3>Howth fishing village</h3>
+                    </div>
+                </div>
+                <div class="carousel-item" style="background-image: url('resurces/dublinHouse.jpeg')">
+                    <div class="carousel-caption">
+                        <h3>Howth fishing village</h3>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="carousel-controls">
+                <button class="carousel-btn prev">&#10094;</button>
+                <button class="carousel-btn next">&#10095;</button>
+            </div>
+            
+            <div class="carousel-dots">
+                <div class="carousel-dot active"></div>
+                <div class="carousel-dot"></div>
+                <div class="carousel-dot"></div>
+                <div class="carousel-dot"></div>
+                <div class="carousel-dot"></div>
+                <div class="carousel-dot"></div>
+                <div class="carousel-dot"></div>
+                <div class="carousel-dot"></div>
             </div>
         </div>
 
@@ -708,9 +888,9 @@
             <div class="main-column">
                 <!-- Il Programma -->
                 <div class="content-section">
-                    <h2>Il Programma di Studio</h2>
-                    <p>Ho partecipato a un corso intensivo di Business English presso la prestigiosa Cambridge University, focalizzato sullo sviluppo di competenze linguistiche avanzate nel contesto aziendale e tecnologico.</p>
-                    
+                    <h2>Study program</h2>
+                    <p>The time spent in Dublin was not only based on visiting the city but also on participating in an English course that focused not so much on grammar but instead on speaking activities.</p>
+                    <!--
                     <div class="gallery">
                         <div class="gallery-item">
                             <img src="https://images.unsplash.com/photo-1581281863883-2469417a1668?w=800&h=600&fit=crop" alt="Cambridge University">
@@ -725,55 +905,60 @@
                             <div class="caption">Lavoro di gruppo</div>
                         </div>
                     </div>
-                    
-                    <h3>Obiettivi del corso</h3>
+                    -->
+                    <h3>Course Goals</h3>
                     <ul style="padding-left: 1.5rem; margin-bottom: 1.5rem; color: var(--gray); line-height: 1.8;">
-                        <li>Sviluppo della fluency nel business English</li>
-                        <li>Preparazione per presentazioni professionali</li>
-                        <li>Scrittura di report e documenti aziendali</li>
-                        <li>Comunicazione efficace in contesti multiculturali</li>
-                        <li>Vocabolario tecnico per il settore IT</li>
+                        <li>Improving speaking skills</li>
+                        <li>Learning more vocabulary</li>
+                        <li>Improve oral exposition</li>
                     </ul>
                 </div>
 
                 <!-- Le Attività -->
                 <div class="content-section">
-                    <h2>Esperienze e Attività Culturali</h2>
+                    <h2>Cultural Experiences and Activities</h2>
                     
                     <div class="work-timeline">
                         <div class="timeline-item">
                             <div class="timeline-dot"></div>
                             <div class="timeline-content">
-                                <strong>Tour dei College</strong>
-                                <p>Visita ai principali college: King's College, Trinity College e St John's College</p>
+                                <strong>Dublin Orientation</strong>
+                                <p>First guided tour of the city with our teachers</p>
                             </div>
                         </div>
                         <div class="timeline-item">
                             <div class="timeline-dot"></div>
                             <div class="timeline-content">
-                                <strong>Punting sul fiume Cam</strong>
-                                <p>Esperienza tradizionale di navigazione sul fiume che attraversa la città</p>
+                                <strong>Howth Fishing village</strong>
+                                <p>Visiting the Howth fishing village and its coastline</p>
                             </div>
                         </div>
                         <div class="timeline-item">
                             <div class="timeline-dot"></div>
                             <div class="timeline-content">
-                                <strong>Visita al Fitzwilliam Museum</strong>
-                                <p>Esplorazione di una delle collezioni d'arte più importanti del Regno Unito</p>
+                                <strong>PADDYWAGON Excursion</strong>
+                                <p>Full day excursion with the Paddywagon van, visiting the cliffs of Moher and Galway city</p>
                             </div>
                         </div>
                         <div class="timeline-item">
                             <div class="timeline-dot"></div>
                             <div class="timeline-content">
-                                <strong>Workshop di innovazione</strong>
-                                <p>Partecipazione a un workshop sull'innovazione tecnologica con studenti da tutto il mondo</p>
+                                <strong>Dublin walking tour</strong>
+                                <p>Second guided tour of the city with a guide from CES School</p>
                             </div>
                         </div>
                         <div class="timeline-item">
                             <div class="timeline-dot"></div>
                             <div class="timeline-content">
-                                <strong>Presentazione finale</strong>
-                                <p>Presentazione di un progetto su "Digital Transformation in Modern Business"</p>
+                                <strong>Trinity College</strong>
+                                <p>Visit to trinity college and interview with its students</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot"></div>
+                            <div class="timeline-content">
+                                <strong>UCD: University College</strong>
+                                <p>Visit to the ucd university in dublin and its workshops</p>
                             </div>
                         </div>
                     </div>
@@ -781,107 +966,89 @@
 
                 <!-- Competenze Acquisite -->
                 <div class="content-section">
-                    <h2>Competenze Acquisite</h2>
+                    <h2>Skills Acquired</h2>
                     
-                    <h3>Competenze linguistiche</h3>
-                    <p>Miglioramento significativo nella fluency e nell'accuratezza linguistica, con particolare focus sul business English e terminologia tecnologica.</p>
-                    
-                    <h3>Competenze interculturali</h3>
-                    <p>Sviluppo di sensibilità culturale e capacità di lavorare in team internazionali con studenti provenienti da 15 diversi paesi.</p>
-                    
-                    <h3>Competenze professionali</h3>
-                    <p>Acquisizione di tecniche per presentazioni efficaci, negoziazione in contesti internazionali e scrittura professionale.</p>
-                    
+                    <h3>Language skills</h3>
+                    <p>The experience has definitely improved my self-confidence when speaking in English, although I feel there is still a lot to learn</p>
+                                                            
                     <div class="tech-stack">
-                        <div class="tech-item" style="background: var(--gradient-1);">
-                            <div class="tech-icon">💬</div>
-                            <strong>Business English</strong>
-                        </div>
                         <div class="tech-item" style="background: var(--gradient-2);">
                             <div class="tech-icon">🌐</div>
-                            <strong>Comunicazione interculturale</strong>
+                            <strong>Intercultural communication</strong>
                         </div>
                         <div class="tech-item" style="background: var(--gradient-3);">
                             <div class="tech-icon">📊</div>
-                            <strong>Presentazioni professionali</strong>
+                            <strong>Professional presentations</strong>
                         </div>
-                        <div class="tech-item" style="background: #764ba2; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
-                            <div class="tech-icon">🤝</div>
-                            <strong>Teamwork internazionale</strong>
+                        <div class="tech-item" style="background: var(--gradient-1);">
+                            <div class="tech-icon">👤</div>
+                            <strong>Autonomy</strong>
                         </div>
                     </div>
                 </div>
 
                 <!-- Citazione finale -->
                 <div class="developer-quote">
-                    <p>"Cambridge è stata un'esperienza che ha aperto la mia mente a nuove prospettive e culture. Vivere in un ambiente accademico così stimolante mi ha dato non solo competenze linguistiche, ma anche una maggiore sicurezza nelle mie capacità di comunicare in contesti internazionali."</p>
+                    <p>"Dublin was an experience that, in a way, consolidated what I had already learnt in Cambridge. Although I feel that there is still much to learn about the English language."</p>
                 </div>
             </div>
 
             <!-- Sidebar -->
             <div class="sidebar">
                 <div class="info-box">
-                    <h3>Struttura del Corso</h3>
+                    <h3>School Lessons Structure</h3>
                     <ul>
                         <li>
-                            <strong>Business Communication</strong>
-                            <p>9:00-11:00 (Lun-Ven)</p>
+                            <strong>Introduction to the main acrivities</strong>
+                            <p>13:45-17:30 (Monday 26)</p>
                         </li>
                         <li>
-                            <strong>Academic Writing</strong>
-                            <p>11:30-13:00 (Lun-Mer-Ven)</p>
+                            <strong>Lessons about ireland culture</strong>
+                            <p>13:45-17:30 (Tuesday 27)</p>
                         </li>
                         <li>
-                            <strong>Presentation Skills</strong>
-                            <p>14:00-16:00 (Mar-Gio)</p>
+                            <strong>Workshop</strong>
+                            <p>13:45-17:30 (Wednesday 28)</p>
                         </li>
                         <li>
-                            <strong>Cultural Workshops</strong>
-                            <p>16:30-18:00 (Mer-Ven)</p>
+                            <strong>Presentation</strong>
+                            <p>13:45-17:30 (Thursday 29)</p>
                         </li>
                     </ul>
                 </div>
 
                 <div class="info-box">
-                    <h3>Logistica</h3>
+                    <h3>Logistic</h3>
                     <ul>
                         <li>
-                            <strong>Alloggio</strong>
-                            <p>Residenza universitaria al St Catharine's College</p>
+                            <strong>Accommodation</strong>
+                            <p>Host Family home - 36 Santry Close</p>
                         </li>
                         <li>
-                            <strong>Trasporti</strong>
-                            <p>Abbonamento bus cittadino + bicicletta</p>
+                            <strong>Transports</strong>
+                            <p>TFI Leap Visitor</p>
                         </li>
                         <li>
-                            <strong>Pasti</strong>
-                            <p>Pensione completa nella mensa del college</p>
-                        </li>
-                        <li>
-                            <strong>Internet</strong>
-                            <p>Connessione Wi-Fi in tutto il campus</p>
+                            <strong>Food</strong>
+                            <p>Family dinner included and extra lunches</p>
                         </li>
                     </ul>
                 </div>
 
                 <div class="info-box">
-                    <h3>La Città</h3>
+                    <h3>City</h3>
                     <div style="font-size: 1.1rem; line-height: 2;">
                         <div style="display: flex; align-items: center; gap: 0.8rem; margin-bottom: 0.8rem;">
                             <span style="font-size: 1.5rem;">🏛️</span>
-                            <span>Popolazione: 150,000 abitanti</span>
-                        </div>
-                        <div style="display: flex; align-items: center; gap: 0.8rem; margin-bottom: 0.8rem;">
-                            <span style="font-size: 1.5rem;">🎓</span>
-                            <span>31 college universitari</span>
-                        </div>
-                        <div style="display: flex; align-items: center; gap: 0.8rem; margin-bottom: 0.8rem;">
-                            <span style="font-size: 1.5rem;">📚</span>
-                            <span>Fondata nel 1209</span>
+                            <span>Polulation: 1.54 mln</span>
                         </div>
                         <div style="display: flex; align-items: center; gap: 0.8rem;">
-                            <span style="font-size: 1.5rem;">🏆</span>
-                            <span>121 premi Nobel</span>
+                            <span style="font-size: 1.5rem;">📏</span>
+                            <span>Spire height: 125 meters</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.8rem;">
+                            <span style="font-size: 1.5rem;">🍻</span>
+                            <span>Number of pubs: 1000</span>
                         </div>
                     </div>
                 </div>
@@ -897,49 +1064,51 @@
             }, 1000);
         });
 
-        // 2. Configurazione dei colori per Cambridge
-        const cambridgeConfig = {
-            heroGradient: 'var(--gradient-cambridge)',
-            shapeColors: ['rgba(139, 0, 0, 0.3)', 'rgba(178, 34, 34, 0.3)'],
-            quoteBackground: 'var(--gradient-cambridge)',
-            timelineColor: '#8B0000',
-            timelineDotColor: '#8B0000'
+        // 2. Configurazione dei colori per Dublino
+        const dublinConfig = {
+            heroGradient: 'var(--gradient-dublino)',
+            shapeColors: ['rgba(22, 155, 98, 0.3)', 'rgba(255, 136, 62, 0.3)'],
+            quoteBackground: 'var(--gradient-dublino)',
+            timelineColor: '#40C575',
+            timelineDotColor: '#40C575',
+            statHoverBackground: 'linear-gradient(135deg, #0A5C36 0%, #40C575 100%)'
         };
 
         // Applicazione dei colori dopo che il DOM è stato caricato
         document.addEventListener('DOMContentLoaded', function() {
             // Imposta il gradiente per l'hero
-            document.querySelector('.hero').style.background = cambridgeConfig.heroGradient;
+            document.querySelector('.hero').style.background = dublinConfig.heroGradient;
             
             // Imposta i colori delle forme
-            document.getElementById('shape1').style.background = cambridgeConfig.shapeColors[0];
-            document.getElementById('shape2').style.background = cambridgeConfig.shapeColors[1];
+            document.getElementById('shape1').style.background = dublinConfig.shapeColors[0];
+            document.getElementById('shape2').style.background = dublinConfig.shapeColors[1];
             
             // Imposta il colore della timeline
-            document.documentElement.style.setProperty('--timeline-color', cambridgeConfig.timelineColor);
-            document.documentElement.style.setProperty('--timeline-dot-color', cambridgeConfig.timelineDotColor);
+            document.documentElement.style.setProperty('--timeline-color', dublinConfig.timelineColor);
+            document.documentElement.style.setProperty('--timeline-dot-color', dublinConfig.timelineDotColor);
             
             // Imposta il background per la citazione
-            document.querySelector('.developer-quote').style.background = cambridgeConfig.quoteBackground;
+            document.querySelector('.developer-quote').style.background = dublinConfig.quoteBackground;
             
             // Imposta il gradiente per le statistiche
             const statCards = document.querySelectorAll('.stat-card');
             statCards.forEach(card => {
                 const title = card.querySelector('h3');
-                title.style.background = cambridgeConfig.heroGradient;
+                title.style.background = dublinConfig.heroGradient;
                 title.style.webkitBackgroundClip = 'text';
                 title.style.webkitTextFillColor = 'transparent';
                 
                 card.addEventListener('mouseenter', function() {
                     this.style.color = 'white';
                     title.style.color = 'white';
-                    this.style.background = cambridgeConfig.heroGradient;
+                    this.style.background = dublinConfig.statHoverBackground;
                 });
                 
                 card.addEventListener('mouseleave', function() {
                     this.style.color = '';
                     title.style.color = '';
                     this.style.background = '';
+                    title.style.webkitTextFillColor = 'transparent';
                 });
             });
         });
@@ -989,6 +1158,66 @@
                 shape.style.transform = `translateY(${scrolled * speed}px)`;
             });
         });
+
+        // 6. Carosello funzionale
+        const carouselItems = document.querySelectorAll('.carousel-item');
+        const carouselDots = document.querySelectorAll('.carousel-dot');
+        let currentIndex = 0;
+        let carouselInterval;
+
+        function showSlide(index) {
+            // Nascondi tutte le slide
+            carouselItems.forEach(item => item.classList.remove('active'));
+            carouselDots.forEach(dot => dot.classList.remove('active'));
+            
+            // Mostra la slide corrente
+            carouselItems[index].classList.add('active');
+            carouselDots[index].classList.add('active');
+            currentIndex = index;
+        }
+
+        function nextSlide() {
+            let nextIndex = (currentIndex + 1) % carouselItems.length;
+            showSlide(nextIndex);
+        }
+
+        function prevSlide() {
+            let prevIndex = (currentIndex - 1 + carouselItems.length) % carouselItems.length;
+            showSlide(prevIndex);
+        }
+
+        function startCarousel() {
+            carouselInterval = setInterval(nextSlide, 5000);
+        }
+
+        function stopCarousel() {
+            clearInterval(carouselInterval);
+        }
+
+        // Aggiungi event listeners
+        document.querySelector('.carousel-btn.next').addEventListener('click', () => {
+            stopCarousel();
+            nextSlide();
+            startCarousel();
+        });
+
+        document.querySelector('.carousel-btn.prev').addEventListener('click', () => {
+            stopCarousel();
+            prevSlide();
+            startCarousel();
+        });
+
+        // Aggiungi event listeners per i dots
+        carouselDots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                stopCarousel();
+                showSlide(index);
+                startCarousel();
+            });
+        });
+
+        // Avvia il carosello
+        startCarousel();
     </script>
 </body>
 </html>

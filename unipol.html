@@ -5,6 +5,96 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Esperienza Unipol - Paolo Castiglione</title>
     <style>
+        /* Stili migliorati per il link Presentazione */
+        .presentation-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--gradient-unipol);
+            color: white !important;
+            padding: 12px 24px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            margin: 15px 0 25px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(227, 30, 36, 0.3);
+            border: none;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            font-size: 1.05rem;
+        }
+        
+        .presentation-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .presentation-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(227, 30, 36, 0.5);
+        }
+        
+        .presentation-link:hover::before {
+            opacity: 1;
+        }
+        
+        .presentation-link:active {
+            transform: translateY(1px);
+            box-shadow: 0 2px 10px rgba(227, 30, 36, 0.3);
+        }
+        
+        .presentation-link svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Code Showcase */
+        .code-showcase {
+            background: #1a1a2e;
+            color: #fff;
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            overflow-x: auto;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .code-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .code-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #ff5f57;
+        }
+
+        .code-dot:nth-child(2) { background: #ffbd2e; }
+        .code-dot:nth-child(3) { background: #28ca42; }
+
+        .code-showcase code {
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: #4ECDC4;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -690,6 +780,11 @@
                 font-size: 0.9rem;
                 padding: 0.6rem 1.2rem;
             }
+            
+            .presentation-link {
+                padding: 10px 20px;
+                font-size: 0.95rem;
+            }
         }
     </style>
 </head>
@@ -706,7 +801,7 @@
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M19 12H5M12 19l-7-7 7-7"/>
                 </svg>
-                Torna al Portfolio
+                Torna alla home
             </a>
         </div>
     </nav>
@@ -811,6 +906,60 @@
                             <div class="timeline-content">
                                 <div class="timeline-date">Seconda settimana</div>
                                 <p>Sviluppo di parti di codice del voicebot e integrazione con piattaforme di comunicazione interne.</p>
+                                <p>Funzione di esempio, salvataggio della conversazione su db:</p>    
+                                
+                                <div class="code-showcase">
+                                    <div class="code-header">
+                                        <div class="code-dot"></div>
+                                        <div class="code-dot"></div>
+                                        <div class="code-dot"></div>
+                                    </div>
+                                    <pre><code class="language-python">import json
+import boto3
+from botocore.exceptions import ClientError
+
+def lambda_handler(event, context):
+    saveAction = event.get("Details", {}).get("Parameters", {}).get("saveAction")
+    return saveData(event) if str(saveAction) == "true" else fetchData(event)
+
+def saveData(event):
+    bucket_name = "user-conversation-data"
+    s3_client = boto3.client('s3')
+    userPhoneNumber = event["Details"]["ContactData"]["CustomerEndpoint"]["Address"]
+    
+    # Get parameter and prepare data
+    calledCarroAttrezzi = event["Details"]["Parameters"].get("calledCarroAttrezzi")
+    outputData = {"calledCarroAttrezzi": calledCarroAttrezzi or "false"}
+
+    try:
+        # Save to S3
+        s3_client.put_object(
+            Bucket=bucket_name,
+            Key=f"{userPhoneNumber}/sessionAttributes.json",
+            Body=json.dumps(outputData)
+        return {'statusCode': 200, 'key': True}
+    except Exception as e:
+        return {'statusCode': 500, 'key': False}
+
+def fetchData(event):
+    bucket_name = "user-conversation-data"
+    s3_client = boto3.client('s3')
+    userPhoneNumber = event["Details"]["ContactData"]["CustomerEndpoint"]["Address"]
+    
+    try:
+        # Retrieve from S3
+        response = s3_client.get_object(
+            Bucket=bucket_name,
+            Key=f"{userPhoneNumber}/sessionAttributes.json"
+        )
+        json_content = json.loads(response["Body"].read())
+        return {
+            'statusCode': 200,
+            'calledCarroAttrezzi': json_content["calledCarroAttrezzi"]
+        }
+    except ClientError as e:
+        return {'statusCode': 500, 'key': False}</code></pre>
+                                </div>
                             </div>
                         </div>
                         <div class="timeline-item">
@@ -818,6 +967,18 @@
                             <div class="timeline-content">
                                 <div class="timeline-date">Terza settimana</div>
                                 <p>Test, ottimizzazione e documentazione finale del progetto.</p>
+                            
+                                <!-- Link migliorato -->
+                                <a href="https://drive.google.com/file/d/1HkPYZKukVuXCk2D2lvbzVpI5rERgNYz3/view?usp=sharing" class="presentation-link">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                        <polyline points="14 2 14 8 20 8"></polyline>
+                                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                                        <polyline points="10 9 9 9 8 9"></polyline>
+                                    </svg>
+                                    Visualizza Presentazione
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -887,7 +1048,7 @@
                     </div>
                     <div class="team-member">
                         <strong>Andrea Giglio</strong>
-                        <span>Senior Developer</span>
+                        <span>Security Manager</span>
                     </div>
                     <div class="team-member">
                         <strong>Roberto Ampezzan</strong>
@@ -895,11 +1056,11 @@
                     </div>
                     <div class="team-member">
                         <strong>Khodakarami Masoudreza</strong>
-                        <span>Security Specialist</span>
+                        <span>Maintenance Specialist</span>
                     </div>
                     <div class="team-member">
                         <strong>Francesco Pichierri</strong>
-                        <span>QA Tester</span>
+                        <span>Project Manager</span>
                     </div>
                 </div>
 
@@ -941,9 +1102,7 @@
                         <li>Project Manager</li>
                         <li>Business Analyst</li>
                         <li>Security Manager</li>
-                        <li>QA Tester</li>
-                        <li>Change Manager</li>
-                        <li>Service Manager</li>
+                        <li>Maintenance Manager</li>
                     </ul>
                 </div>
             </div>
